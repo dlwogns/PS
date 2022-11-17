@@ -1,11 +1,12 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <cmath>
 #include <algorithm>
 #define INF 2000000001
 using namespace std;
 int T, node_num, edge_num, dest_num, s, g, h;
-pair<vector<double>, vector<int>> ekdlr(int st, vector<vector<pair<int,int>>>&gr){
+pair<vector<double>, vector<int>> ekdlr(int st, vector<vector<pair<int,double>>>&gr){
     vector<double>dist(node_num+1, INF);
     vector<int>an(node_num+1, 0);
     dist[st] = 0;
@@ -18,26 +19,9 @@ pair<vector<double>, vector<int>> ekdlr(int st, vector<vector<pair<int,int>>>&gr
         for(int i=0; i<gr[cur_node].size(); i++){
             int nxt_node = gr[cur_node][i].first;
             double nxt_dist = cur_dist + gr[cur_node][i].second;
-            // if(dist[nxt_node] == nxt_dist){
-            //     if(an[cur_node] == 1){
-            //         an[nxt_node] = 1;
-            //     }
-            // }
             if(dist[nxt_node] > nxt_dist){
                 dist[nxt_node] = nxt_dist;
-                if((cur_node == g && nxt_node == h) || (cur_node == h && nxt_node == g))
-                    dist[nxt_node] += 0.1;
                 pq.push({nxt_dist, nxt_node});
-                // if(cur_node == h && nxt_node == g){
-                //     an[nxt_node] = 1;
-                //     continue;
-                // }
-                // if(cur_node == g && nxt_node == h){
-                //     an[nxt_node] = 1;
-                //     continue;
-                // }
-                // if(an[cur_node] == 1)an[nxt_node] = 1;
-                // if(an[cur_node] == 0) an[nxt_node] = 0;
             }
         }
     }
@@ -49,11 +33,17 @@ int main(){
     cin>>T;
     while(T--){
         cin>>node_num>>edge_num>>dest_num>>s>>g>>h;
-        vector<vector<pair<int,int>>>graph(node_num+1);
+        vector<vector<pair<int,double>>>graph(node_num+1);
         vector<int>dest;
         for(int i=0; i<edge_num; i++){
-            int a, b, d;
-            cin>>a>>b>>d;
+            int a, b;
+            double d;
+            cin>>a>>b;
+            cin>>d;
+            if((a==g && b == h) || (a==h && b==g)){
+                graph[a].push_back({b,d-0.1});
+                graph[b].push_back({a,d-0.1});
+            }
             graph[a].push_back({b,d});
             graph[b].push_back({a,d});
         }
@@ -66,9 +56,13 @@ int main(){
         vector<int>ans;
         for(auto d : dest){
             if(check.first[d] == INF) continue;
-            if(int(check.first[d]) != check.first[d]) ans.push_back(d);
-            //if(check.second[d]) ans.push_back(d);
+            if(floor(check.first[d]) != check.first[d]) ans.push_back(d);
         }
+        // cout<<endl;
+        // for(auto e : check.first){
+        //     cout<<e<<' ';
+        // }
+        // cout<<endl;
         sort(ans.begin(), ans.end());
         for(int i=0; i<ans.size(); i++)
             cout<<ans[i]<<' ';
