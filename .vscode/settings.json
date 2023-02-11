@@ -30,6 +30,7 @@
   "files.associations": {
     "cmath": "cpp",
     "string": "cpp",
-    "stack": "cpp"
+    "stack": "cpp",
+    "xstring": "cpp"
   }
 }
