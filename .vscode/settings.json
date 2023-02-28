@@ -32,6 +32,8 @@
     "string": "cpp",
     "stack": "cpp",
     "xstring": "cpp",
-    "vector": "cpp"
+    "vector": "cpp",
+    "xiosbase": "cpp",
+    "utility": "cpp"
   }
 }
