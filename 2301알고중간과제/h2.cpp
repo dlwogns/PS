@@ -2,7 +2,7 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
-int T, N;
+int T, N, ans;
 int height(int* arr, int cur_node){
     if(cur_node*2 > N) return 0;
     return 1+max(height(arr, cur_node*2), height(arr, cur_node*2+1));
@@ -12,21 +12,12 @@ void swap(int* a, int* b){
     *a = *b;
     *b = tmp;
 }
-// int promote(int* arr, int hStop, int vacant, int h){
-//     if(h <= hStop) return vacant;
-//     if(vacant*2+1<=N && (arr[vacant*2+1] >= arr[vacant*2])){
-//         swap(&arr[vacant], &arr[vacant*2+1]);
-//         return promote(arr, hStop, vacant*2+1, h-1);
-//     }
-//     else{
-//         swap(&arr[vacant], &arr[vacant*2]);
-//         return promote(arr, hStop, vacant*2, h-1);
-//     }
-// }
+
 int promote(int* arr, int hStop, int vacant, int h){
     int vacStop;
-    if(h <= hStop)
+    if(h <= hStop){
         vacStop = vacant;
+    }
     else if(arr[2*vacant] <= arr[2*vacant+1]){
         swap(&arr[vacant], &arr[vacant*2+1]);
         vacStop = promote(arr, hStop, 2*vacant+1, h-1);
@@ -36,19 +27,6 @@ int promote(int* arr, int hStop, int vacant, int h){
     }
     return vacStop;
 }
-// void BubbleupHeap(int* arr, int root, int vacant){
-//     if(vacant == root){
-//         arr[vacant] = arr[root];
-//         return;
-//     }
-//     if(arr[vacant] < arr[vacant/2])
-//         arr[vacant] = arr[root];
-//     else{
-//         swap(&arr[vacant], &arr[vacant/2]);
-//         BubbleupHeap(arr, root, vacant/2);
-//     }
-    
-// }
 void bubbleUpHeap(int* arr, int root, int K, int vacant){
     if(vacant == root)
         arr[vacant] = K;
@@ -63,20 +41,16 @@ void bubbleUpHeap(int* arr, int root, int K, int vacant){
     }
 }
 
-int fixHeapFast(int* arr, int vacant, int h){
+void fixHeapFast(int* arr, int vacant, int h){
     if(h <= 1){
-        if(h == 0) return 0;
-        int flag = 0;
+        if(h == 0) return;
         if(arr[vacant] < arr[vacant*2]){
             swap(&arr[vacant], &arr[vacant*2]);
-            flag = 1;
         }
         if(vacant*2+1 <= N && (arr[vacant] < arr[vacant*2+1])){
             swap(&arr[vacant], &arr[vacant*2+1]);
-            flag = 1;
         }
-        if(flag) return 1;
-        return 0;
+        return;
     }else{
         int hStop = h/2;
         int vacStop = promote(arr, hStop, vacant, h);
@@ -84,9 +58,9 @@ int fixHeapFast(int* arr, int vacant, int h){
         if(arr[vacParent] < arr[vacStop]){
             swap(&arr[vacStop], &arr[vacParent]);
             bubbleUpHeap(arr, vacant,arr[vacant],vacParent);
-            return 1;
+            return ;
         }else
-            return 1 + fixHeapFast(arr, vacStop, hStop);
+            fixHeapFast(arr, vacStop, hStop);
     }
 }
 void constructHeap(int* arr, int cur_node){
@@ -95,12 +69,26 @@ void constructHeap(int* arr, int cur_node){
     if(cur_node*2+1 <= N) constructHeap(arr, cur_node*2+1);
     fixHeapFast(arr, cur_node, height(arr, cur_node));
 }
-int heapsort(int* arr){
-    if(N == 1) return 0;
+void deletemax(int* arr){
     swap(&arr[1], &arr[N]);
-    N-=1;
-    int a = fixHeapFast(arr, 1, height(arr, 1));
-    return 1 + a + heapsort(arr);
+    N -= 1;
+    fixHeapFast(arr, 1, height(arr, 1));
+}
+void heapsort(int* arr){
+    constructHeap(arr, 1);
+    // for(int i=1; i<=N; i++)
+    //     cout<<arr[i]<<' ';
+    // cout<<'\n';
+    int* e = new int[N+1];
+    int t = N;
+    for(int i=N; i>=1; i--){
+        int curMax = arr[1];
+        deletemax(arr);
+        e[i] = curMax;
+    }
+    for(int i=1;i<=t; i++)
+        cout<<e[i]<<' ';
+    cout<<'\n';
 }
 int main(){
     ios::sync_with_stdio(0);
@@ -109,13 +97,11 @@ int main(){
     while(T--){
         cin>>N;
         int* arr = new int[2*N+1];
+        for(int i=1; i<=2*N; i++)
+            arr[i] = -1;
         for(int i=1; i<=N; i++)
             cin>>arr[i];
-        constructHeap(arr, 1);
-        for(int i=1; i<=N; i++)
-            cout<<arr[i]<<' ';
-        cout<<endl;
-        cout<<heapsort(arr);
-        cout<<endl;
+        heapsort(arr);
+        
     }
 }
