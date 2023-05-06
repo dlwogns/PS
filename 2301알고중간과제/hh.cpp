@@ -23,7 +23,6 @@ void bubbleUpHeap(int* arr, int root, int K, int vacant){ // K -> root 값
         if(K <= arr[parent]){
             arr[vacant] = K;
         }else{
-            //arr[vacant] = arr[parent];
             swap(&arr[vacant], &arr[parent]);
             ans += 1;
             bubbleUpHeap(arr, root, K, parent);
@@ -35,12 +34,10 @@ int promote(int* arr, int hStop, int vacant, int h){
     if(h <= hStop)
         vacStop = vacant;
     else if(arr[2*vacant] < arr[2*vacant + 1]){
-        //arr[vacant] = arr[2*vacant+1];
         swap(&arr[vacant], &arr[2*vacant+1]);
         ans += 1;
         vacStop = promote(arr, hStop, 2*vacant+1, h-1);
     }else{
-        //arr[vacant] = arr[2*vacant];
         swap(&arr[vacant], &arr[2*vacant]);
         ans += 1;
         vacStop = promote(arr, hStop, 2*vacant, h-1);
@@ -50,13 +47,7 @@ int promote(int* arr, int hStop, int vacant, int h){
 void fixHeapFast(int* arr, int N, int K, int vacant, int h){
     if(h <= 1){
         if(h == 0)  return;
-        // if(arr[vacant] < arr[vacant*2]){
-        //     swap(&arr[vacant], &arr[vacant*2]);
-            
-        // }
-        // if(vacant*2+1 <= N && (arr[vacant] < arr[vacant*2+1])){
-        //     swap(&arr[vacant], &arr[vacant*2+1]);
-        // }
+    
         int vacCheck;
         if(arr[vacant*2] >= arr[vacant*2+1])
             vacCheck = vacant*2;
@@ -73,7 +64,6 @@ void fixHeapFast(int* arr, int N, int K, int vacant, int h){
 
         int vacParent = vacStop/2;
         if(arr[vacParent] <= K){
-            //arr[vacStop] = arr[vacParent];
             swap(&arr[vacStop], &arr[vacParent]);
             ans += 1;
             bubbleUpHeap(arr, vacant, K, vacParent);
@@ -97,10 +87,6 @@ void deleteMax(int* arr, int N){
     arr[N] = -1;
     ans += 1;
     fixHeapFast(arr, N-1, arr[1], 1, height(arr, 1, N-1));
-    // for(int i=1; i<=N-1; i++)
-    //     cout<<arr[i]<<' ';
-    // cout<<ans;
-    // cout<<endl;
 }
 
 void heapSort(int* arr, int N){
@@ -117,8 +103,6 @@ void heapSort(int* arr, int N){
         t -= 1;
         e[i] = curMax;
     }
-    // for(int i=1; i<=t; i++)
-    //     cout<<e[i]<<' ';
     cout<<ans<<'\n';
 }
 
@@ -133,9 +117,6 @@ int main(){
             arr[i] = -1;
         for(int i=1; i<=N; i++)
             cin>>arr[i];
-        // constructHeap(arr, 1, N);
-        // for(int i=1; i<=N; i++)
-        //     cout<<arr[i]<<' ';
         heapSort(arr, N);
         ans = 0;
     }
