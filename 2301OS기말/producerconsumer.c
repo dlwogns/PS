@@ -1,7 +1,8 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <semaphore.h>
-#define ITER 100
+#define ITER 1000
+#define MAX 50
 void *thread_increment(void *arg);
 void *thread_decrement(void *arg);
 int x;
@@ -12,7 +13,7 @@ int main() {
     pthread_t tid1, tid2;
 
     sem_init(&s, 0, 1);
-    sem_init(&e, 0, ITER);
+    sem_init(&e, 0, MAX);
     sem_init(&f, 0, 0);
 
     pthread_create(&tid1, NULL, thread_increment, NULL);
