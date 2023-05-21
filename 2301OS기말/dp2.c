@@ -3,6 +3,7 @@
 #include <semaphore.h>
 #define NUM 5
 sem_t forks[NUM]; // forks
+sem_t once;
 void pickup(int philosopher_num){
     sem_wait(&forks[philosopher_num % NUM]);
 }
@@ -21,10 +22,14 @@ void *philosopher(void *arg){
     int philosopher_num;
     philosopher_num = (unsigned long int) arg;
     while(1){
+
+        sem_wait(&once);
         pickup(philosopher_num);
         printf("philosopher %d picks up the fork %d.\n", philosopher_num, philosopher_num);
         pickup(philosopher_num + 1);
         printf("philosopher %d picks up the fork %d.\n", philosopher_num, (philosopher_num + 1) % NUM);
+        sem_post(&once);
+
         eating(philosopher_num);
         putdown(philosopher_num + 1);
         printf("philosopher %d puts down the fork %d.\n", philosopher_num, (philosopher_num + 1) % NUM);
@@ -40,6 +45,7 @@ int main(){
     for(int i=0; i<NUM; i++){
         sem_init(&forks[i], 0, 1);
     }
+    sem_init(&once, 0, 1);
     for(unsigned long int i=0; i<NUM; i++){
         pthread_create(&threads[i], NULL, philosopher, (void*)i);
     }
