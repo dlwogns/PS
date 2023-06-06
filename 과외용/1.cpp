@@ -1,22 +1,41 @@
 #include <iostream>
+#include <string>
+#include <vector>
 using namespace std;
-int func1(int b){
-    return b;
-}
-int func2(int* arr){
-    return arr[5];
-}
+class cal;
 int main(){
-    // call by value, call by reference
-    int a = 5;
-    int* b = &a;
-    // * -> 포인터, 역참조
-    // & -> 레퍼런스, 참조
-    // &, * -> 연산자. 자료형* -> ~~ 타입 포인터 변수
-    // 포인터 변수는 주소값을 저장.
-    cout<<*b;
-    //cout<<func1(a);
+    // // 동적 할당
+    // // 정적(static) 동적(dynamic)
+    // int a[10];
 
-    // 포인터 변수 -> 자료형*
-    // 일단은 void빼고 다 된다.
+    // //동적할당의 예시
+    // int N;
+    // cin>>N;
+    // int* b = new int[N];
+    // // , vector
+
+    // // new 할당
+    // // new type; 
+    // // 배열이면 new type[값];
+    // int* v1 = new int;
+    
+    // // delete 해제
+    // // delete
+    // delete v1;
+
+
+    // vector
+    //vector<int>v;
+    // v.push_back 할때마다 v의 길이가 하나씩 늘어난다.
+    
+    int N = 100;
+    vector<int>v(N, 7); // (사이즈, 전체 사이즈를 초기화할 값)
+    // string -> vector<char>v
+    string s;
+    cin>>s;
+
+    // 전역변수 지역변수 (scope)
+    // 상수와 변수
+    // static
+
 }
