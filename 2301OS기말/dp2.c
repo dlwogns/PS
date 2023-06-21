@@ -23,7 +23,8 @@ void *philosopher(void *arg){
     philosopher_num = (unsigned long int) arg;
     while(1){
 
-        sem_wait(&once);
+        sem_wait(&once); // 이 부분이 포크를 가져가는 부분이다.
+        // 두개의 포크를 한번에 가져가도록 한다.
         pickup(philosopher_num);
         printf("philosopher %d picks up the fork %d.\n", philosopher_num, philosopher_num);
         pickup(philosopher_num + 1);

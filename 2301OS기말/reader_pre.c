@@ -3,36 +3,33 @@
 #include <semaphore.h>
 #define ITER 1000
 
-sem_t wsem , x;
+sem_t wsem , x; //writer를 제한하기 위한 wsem, critical section을 위한 x
 int readercount = 0;
 
 void* writer(void *arg){
-    for(int i=0; i<ITER; i++){
+    while(1){
         sem_wait(&wsem);
         //write unit
         printf("%s\n", "Write unit executed!");
-        printf("%s : %d\n", "readercount : ", readercount);
         sem_post(&wsem);
     }
 }
 
 void* reader(void *arg){
-    for(int i=0; i<ITER; i++){
+    while(1){
         sem_wait(&x);
         readercount++;
         if(readercount == 1) sem_wait(&wsem);
         sem_post(&x);
 
         //read unit
-        printf("%s", "Read unit executed!\n");
+        printf("%s\n", "Read unit executed!");
 
         sem_wait(&x);
         readercount--;
         if(readercount == 0) sem_post(&wsem);
         sem_post(&x);
     }
-
-
 }
 
 int main(){
@@ -48,10 +45,5 @@ int main(){
     sem_destroy(&wsem);
     sem_destroy(&x);
 
-    printf("%s", "Success");
-
     return 0;
-
-
-    
 }

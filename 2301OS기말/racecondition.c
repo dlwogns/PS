@@ -1,27 +1,10 @@
 #include <pthread.h>
 #include <stdio.h>
-#define ITER 10
-// void *thread_increment(void *arg);
-// void *thread_decrement(void *arg);
-int x;
-
-/* thread routine */
-void * thread_increment (void *arg) {
-    int i, val;
-    for (i=0; i< ITER ; i++) {
-        val = x;
-        printf("%u: %d\n", (unsigned int) pthread_self(), val); x = val + 1;
-    }
-    return NULL;
-}
-void * thread_decrement (void *arg) { int i, val;
-    for (i=0; i< ITER ; i++) {
-        val = x;
-        printf("%u: %d\n", (unsigned int) pthread_self(), val); x = val - 1;
-    }
-    return NULL;
-}
-
+#define ITER 1000
+void *thread_increment(void *arg);
+void *thread_decrement(void *arg);
+int x; //critical resource
+ 
 int main() {
     pthread_t tid1, tid2;
     pthread_create(&tid1, NULL, thread_increment, NULL);
@@ -32,4 +15,27 @@ int main() {
         printf("BOOM! counter=%d\n", x);
     else
         printf("OKcounter=%d\n", x);
+
+        
+}
+
+/* thread routine */
+void * thread_increment (void *arg) {
+    int i, val;
+    for (i=0; i< ITER ; i++) {
+        //critical section
+        val = x;
+        printf("%u: %d\n", (unsigned int) pthread_self(), val); x = val + 1;
+        //
+    }
+    return NULL;
+}
+void * thread_decrement (void *arg) { int i, val;
+    for (i=0; i< ITER ; i++) {
+        //critical section
+        val = x;
+        printf("%u: %d\n", (unsigned int) pthread_self(), val); x = val - 1;
+        //
+    }
+    return NULL;
 }

@@ -21,10 +21,17 @@ void *philosopher(void *arg){
     int philosopher_num;
     philosopher_num = (unsigned long int) arg;
     while(1){
-        pickup(philosopher_num);
-        printf("philosopher %d picks up the fork %d.\n", philosopher_num, philosopher_num);
-        pickup(philosopher_num + 1);
-        printf("philosopher %d picks up the fork %d.\n", philosopher_num, (philosopher_num + 1) % NUM);
+        if(philosopher_num < 4){
+            pickup(philosopher_num);
+            printf("philosopher %d picks up the fork %d.\n", philosopher_num, philosopher_num);
+            pickup(philosopher_num + 1);
+            printf("philosopher %d picks up the fork %d.\n", philosopher_num, (philosopher_num + 1) % NUM);
+        }else{
+            pickup(philosopher_num + 1);
+            printf("philosopher %d picks up the fork %d.\n", philosopher_num, (philosopher_num + 1) % NUM);
+            pickup(philosopher_num);
+            printf("philosopher %d picks up the fork %d.\n", philosopher_num, philosopher_num);
+        }
         eating(philosopher_num);
         putdown(philosopher_num + 1);
         printf("philosopher %d puts down the fork %d.\n", philosopher_num, (philosopher_num + 1) % NUM);

@@ -1,23 +1,23 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <semaphore.h>
-#define ITER 1000
 
 sem_t wsem , x, z, rsem, y;
 int readercount = 0, writecount = 0;
 
 void* writer(void *arg){
-    for(int i=0; i<ITER; i++){
+    while(1){
         sem_wait(&y);
         writecount++;
-        if(writecount == 1)
+        // reader preference와 비슷하게 writer가 1이된다면
+        // rsem을 wait해 reader가 못들어오게 한다.
+        if(writecount == 1) 
             sem_wait(&rsem);
         sem_post(&y);
 
         sem_wait(&wsem);
         //write unit
         printf("%s\n", "Write unit executed!");
-        printf("%s : %d\n", "readercount : ", readercount);
         sem_post(&wsem);
 
         sem_wait(&y);
@@ -28,7 +28,7 @@ void* writer(void *arg){
 }
 
 void* reader(void *arg){
-    for(int i=0; i<ITER; i++){
+    while(1){
         sem_wait(&z);
         sem_wait(&rsem);
         sem_wait(&x);
@@ -39,7 +39,7 @@ void* reader(void *arg){
         sem_post(&z);
 
         //read unit
-        printf("%s", "Read unit executed!\n");
+        printf("%s\n", "Read unit executed!");
 
         sem_wait(&x);
         readercount--;
@@ -57,7 +57,7 @@ int main(){
     sem_init(&x, 0, 1); // reader atomic을 위한 semaphore
     sem_init(&z, 0, 1);
     sem_init(&y, 0, 1);
-    sem_init(&rsem, 0, 1);
+    sem_init(&rsem, 0, 1); //reader
 
     pthread_create(&tid1, NULL, reader, NULL);
     pthread_create(&tid2, NULL, writer, NULL);

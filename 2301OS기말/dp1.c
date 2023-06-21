@@ -24,7 +24,7 @@ void *philosopher(void *arg){
     int philosopher_num;
     philosopher_num = (unsigned long int) arg;
     while(1){
-        sem_wait(&room);
+        sem_wait(&room); // 4명만 방에 들어갈 수 있게 한다.
         pickup(philosopher_num);
         printf("philosopher %d picks up the fork %d.\n", philosopher_num, philosopher_num);
         pickup(philosopher_num + 1);

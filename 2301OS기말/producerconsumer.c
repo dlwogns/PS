@@ -6,7 +6,8 @@
 void *thread_increment(void *arg);
 void *thread_decrement(void *arg);
 int x;
-sem_t s, e, f;
+sem_t s, e, f; //이전 코드에서 e를 추가하였다.
+// 상단에 서술한 empty를 나타내는 semaphore이다.
 
 
 int main() {
@@ -37,7 +38,7 @@ void * thread_increment (void *arg) {
     int i, val;
     
     for (i=0; i< ITER ; i++) {
-        sem_wait(&e);
+        sem_wait(&e); //producer에서는 e를 1 줄여준다. 만약 버퍼가 가득 차있으면, 기다린다.
         sem_wait(&s);
         val = x;
         printf("%u: %d\n", (unsigned int) pthread_self(), val);
@@ -57,7 +58,7 @@ void * thread_decrement (void *arg) { int i, val;
         printf("%u: %d\n", (unsigned int) pthread_self(), val);
         x = val - 1;
         sem_post(&s);
-        sem_post(&e);
+        sem_post(&e); // consumer에서는 e를 1 늘려 버퍼가 한칸 더 비었다는 것을 말한다.
     }
     pthread_exit(NULL);
     return NULL;
