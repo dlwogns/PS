@@ -1,29 +1,43 @@
 #include <iostream>
+#include <algorithm>
+#include <string>
 using namespace std;
+int t;
 int main(){
-    // 배열 선언
-    int arr[9][9] = {0};
-    // 입력
-    for(int i=0; i<9; i++){
-        for(int j=0; j<9; j++){
-            cin>>arr[i][j];
-        }
-    }
-    // 최댓값 찾기
-    int max_num = -1;
-    int row = 0, col = 0;
-    //row -> 행, col -> 열
-    for(int i=0; i<9; i++){
-        for(int j=0; j<9; j++){
-            if(arr[i][j]>max_num){
-                max_num = arr[i][j];
-                row = i;
-                col = j;
+    cin>>t;
+    while(t--){
+        string s, l,r;
+        int m;
+        cin>>s;
+        cin>>m;
+        cin>>l>>r;
+
+        int arr[10], count[10][10] = {0};
+        for(auto e : s){
+            for(int i=0; i<10; i++){
+                if(arr[i]){
+                    count[i][e-'0'] = 1;
+                }
             }
+            arr[e-'0'] = 1;
         }
+        
+        int ans=0;
+        for(int i=l[0]-'0'; i <= r[0] - '0'; i++){
+            int flag = 0;
+            for(int j=1; j<m; j++){
+                for(int k = 0; k<10; k++){
+                    if(k>=l[j]-'0' && k <=r[j]-'0' && count[i][k] == 0) flag = 1;
+                }
+                if(!flag) break;
+                if(flag && (j == m-1)) continue;
+                flag = 0;
+            }
+            if(flag) ans = 1;
+        }
+        if(ans) cout<<"YES\n";
+        else cout<<"NO\n";
+       
+
     }
-    cout<<max_num<<'\n';
-    cout<<row+1<<' '<<col+1;
-
-
 }

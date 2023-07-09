@@ -1,31 +1,30 @@
 #include <iostream>
+#include <vector>
+#include <string>
 using namespace std;
-class Node{
+class Array{
+    private:
+        int* array;
+        
     public:
-        Node* next;
+        Array(int N){
+            array = new int[N];
+        };
 };
 
-// pointer
-// call by value, call by reference
-int func(int a, int b){
-    //call by value
-}
-int func2(int& a, int& b){
-    //call by reference
-}
-// value, reference
-
 int main(){
-    int a = 1;
-    int* pa = &a;
-    
-    // & -> reference, * -> pointer
-    // & -> 어떤 변수의 주소를 의미. (참조) 연산자
-    cout<<&a<<endl;
-    // * -> 역참조, 주소에 해당하는 값 연산자
-    cout<<*pa<<endl;
-    // 자료형* -> 포인터 변수 자료형(주소값을 저장)
-    int* pa2 = &a;
+   
+    // 자료구조
+    // Array
+    // 배열
+    // 수를 입력받고, 그 수가 배열의 사이즈가 됨.
+    // 멤버 함수 -> size, find
+    // size -> 현재 몇개의 원소가 들어가 있는지.
+    // insert -> 배열에 값을 넣어준다. 사이즈가 넘치면 -1 출력.
+    // delete -> 배열의 값을 삭제한다. 배열이 비어있으면 -1 출력.
+    // find -> 어떤 수를 입력받고, 그 수가 배열에 존재 하는지. 존재한다면 해당하는 인덱스 출력. 존재하지 않는다면 -1 출력
 
-
+    int N;
+    cin>>N;
+    Array arr(N);
 }
