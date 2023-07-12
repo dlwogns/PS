@@ -1,28 +1,34 @@
-// 1. 하나씩 나머지 구하면서 666 연속하는거 찾기.
-// 2. pattern matching
-// int -> string
-// 
 #include <iostream>
-#include <string>
+#include <algorithm>
+#include <vector>
 using namespace std;
-int N, i = 1;
+long long S, T, D, ans;
 int main(){
-    cin>>N;
-    while(N){ 
-        if(to_string(i).find("666") != string::npos){
-            // pattern matching(string)
-            // to_string(i) => int -> string (string STL)
-            // find(string s) -> 어떤 string안에 s가 있는지.
-            // find -> return pointer -> 없을때는 string::npos
-            N -= 1;
-            if(N == 0){
-                cout<<i;
-                return 0;
-            }
-        }
-        i += 1;
+    ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    cin>>S>>T>>D;
+    vector<long long>sum(D, 0);
+    for(int i=0; i<D; i++){
+        long long w; cin>>w;
+        if(i == 0) sum[i] = w;
+        else sum[i] = w + sum[i-1];
     }
+    for(int i=0; i<D; i++)
+        if(T >= S + sum[i]){
+            cout<<i+1;
+            return 0;
+        }
+    if(sum[D-1] >= 0){
+        cout<<-1; return 0;
+    }
+    long long comp = (T-S)%sum[D-1];
+    if(comp == 0){
+        cout<<(T-S)/sum[D-1]*D;
+        return 0;
+    }
+    for(int i=0; i<D; i++)
+        if(sum[i] <= comp){
+            cout<<((T-S)/sum[D-1]*D) + (i+1);
+            return 0;
+        }
+    cout<<-1;
 }
-// bruteforce
-// 완전탐색
-// N < O(N) < N^2

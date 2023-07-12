@@ -1,40 +1,43 @@
 #include <iostream>
-#include <string>
+#include <vector>
+#include <algorithm>
+#define ll long long
 using namespace std;
-
-class Array{
-    private:
-        int* arr;
-    public:
-        Array(int N){
-            arr = new int[N];
-        }
-        void Insert(int data, int index){
-            // 인덱스에 값을 넣어준다.
-        }
-        void Erase(int index){
-            // 인덱스에 해당하는 값을 빼준다. (0 으로 바꿔준다)
-        }
-        int find(int data){
-            // 배열 안에 data가 있으면 1 return, 없으면 0 return
-        }
-        int Size(){
-            //return size;
-        }
-};
-
+ll S, T, D, ans=100001;
+ll arr[100001];
 int main(){
-    // Array
-    // 배열 -> 자료의 나열
-    // index based
-    // insert -> insert variables based on index
-    // erase 
-    // size
-    // find
-    // 정수를 입력받고, 그 정수를 사이즈로 하는 배열을 구현하라.
-    int N; // size
-    cin>>N;
-    string s;// 명령어
-    cin>>s;
-    
+    cin>>S>>T>>D;
+    for(ll i=1; i<=D; i++){
+        ll w; cin>>w;
+        arr[i] = w + arr[i-1];
+        if(arr[i] + S <= T) ans = min(ans,i);
+    }
+    if(ans != 100001){
+        cout<<ans; return 0;
+    }
+
+    if(arr[D] >= 0){
+        cout<<"-1"; return 0;
+    }
+    ll ans2= 0;
+    ll lo = 1, hi = 100000;
+    while(lo <= hi){
+        ll mid = (lo+hi)/2;
+        ll check = 0;
+        // loop or loop-1
+        ll sub = S + (mid-1) *arr[D];
+        for(int i=1; i<=D; i++){
+            if(sub + arr[i] <=T){
+                check = 1;
+                ans2 = (mid-1)*D+i;
+                break;
+            }
+        }
+        if(check)  hi = mid-1;
+        else lo = mid+1;
+    }
+    if(ans2 != 0)
+        cout<<ans2;
+    else
+        cout<<"-1";
 }
