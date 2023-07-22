@@ -21,5 +21,4 @@ int main(){
         else hi = mid;
     }
     cout<<lo<<'\n';
-
 }
