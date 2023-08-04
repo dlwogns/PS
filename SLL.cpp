@@ -1,29 +1,82 @@
 #include <iostream>
-#include <cmath>
+#include <string>
 using namespace std;
-int arr[6], ans, remain;
-int main(){
-    for(int i=0; i<6; i++) cin>>arr[i];
-    ans += (arr[4]*5 + arr[3]*4)/6;
-    (ans%6 == 0) ? ans += 0 : ans += 1;
-    remain = 6 * ans - (arr[4]*5 + arr[3]*4);
-    arr[0] -= arr[4]*5; arr[1] -= arr[3]*2;
-    if(remain >= 3){
-        arr[2] -= 2;
-        remain -= 3;
+
+class Node {
+private:
+    int data;
+    Node* next;
+    Node* prev;
+
+public:
+    Node(int data) {
+        this->data = data;
+        this->next = NULL;
+        this->prev = NULL;
     }
-    if(remain >= 2){
-        arr[1] -= 3;
-        remain -= 2;
+
+    friend class DLinkedList;
+};
+
+class DLinkedList {
+private:
+    Node* header;
+    Node* trailer;
+    int size;
+
+public:
+    DLinkedList() {
+        this->header = NULL;
+        this->trailer = NULL;
+        this->size = 0;
     }
-    if(remain >= 1){
-        arr[0] -= 6;
-        remain -= 1;
+    void insert(int idx, int input_data){
+        Node* newNode = new Node(input_data);
+        if(idx == 0){
+            if(size == 0){
+                header = trailer = newNode;
+            }else{
+                newNode->next = header;
+                header->prev = newNode;
+                header = newNode;
+            }
+            size += 1;
+        }else if(idx == size){
+            trailer->next = newNode;
+            newNode->prev = trailer;
+            trailer = newNode;
+            size += 1;
+        }else{
+            Node* curNode = header;
+            while(idx--){
+                curNode = curNode->next;
+            }
+            newNode->next = curNode;
+            curNode->prev->next = newNode;
+            newNode->prev = curNode->prev;
+            curNode->prev = newNode;
+        }
     }
-    
 
+    void Print(){
+        Node* curNode = header;
+        while(curNode != NULL){
+            cout<<curNode->data<<' ';
+            curNode = curNode->next;
+        }
+        cout<<endl;
+    }
+   
+};
 
+int main() {
+    string cmd;
+    DLinkedList dll;
+    dll.insert(0,1);
+    dll.insert(0,2);
+    dll.insert(2,3);
+    dll.insert(1,4);
+    dll.Print();
 
-
+   
 }
-
