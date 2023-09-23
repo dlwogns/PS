@@ -17,7 +17,9 @@ int graph[10][10], visited[10][10], dx[4] = {-1,0,1,0}, dy[4] = {0,-1,0,1};
 int main(){
     for(int i=0; i<10; i++)
         for(int j=0; j<10; j++)
-            graph[i][j];
+            //cin>>graph[i][j];
+
+
     queue<pair<int,int > >q;
     q.push(make_pair(0,0));
     visited[0][0] = 1;
