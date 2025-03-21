@@ -1,31 +1,39 @@
 #include <iostream>
-#include <unordered_map>
 #include <algorithm>
 using namespace std;
-int N, d, k, c, ans;
-int arr[3000001];
-unordered_map<int, int> check;
+int N, d, k, c, ans, chk;
+int arr[3000001], sushi[3001];
 int main(){
     ios::sync_with_stdio(0); cin.tie(0);
     cin>>N>>d>>k>>c;
-    for(int i=0; i<N; i++)
-        cin>>arr[i];
-    int st= 0, dest = k-1;
-    for(int i = st; i<= dest; i++){
-        check[arr[i]] += 1;
+    // 행사 무조건 참여가 조건
+    // 0 ~ N-1까지 반복문 돌림.
+    // sliding window로 돌려야됨.
+    for(int i=0; i<N; i++) cin>>arr[i];
+    for(int i=0; i<k; i++) {
+        if(sushi[arr[i]] == 0) 
+            ans += 1;
+        sushi[arr[i]] += 1;
     }
-    //cout<<check.size()<<endl;
-    ans = check.size();
-    for(int i=1; i<N; i++){
-        check[arr[i-1]] -= 1;
-        if(check[arr[i-1]] == 0)
-            check.erase(arr[i-1]);
-        dest = (dest+1)%N;
-        check[arr[dest]] += 1;
-        if(check.find(c) == check.end()){
-            ans = max(int(check.size())+1, ans);
-        }else
-            ans = max(int(check.size()), ans);
+    chk = ans;
+    if(sushi[c] == 0) ans += 1;
+    int lp = 0, rp = k-1;
+    while(lp != N) {
+        sushi[arr[lp]] -= 1;
+        if(sushi[arr[lp]] == 0) chk -= 1;
+        lp += 1;
+        
+        rp = (rp+1)%N;
+        sushi[arr[rp]] += 1;
+        if(sushi[arr[rp]] == 1) chk += 1;
+
+        if(sushi[c] == 0) {
+            chk += 1;
+            ans = max(ans, chk);
+            chk -= 1;
+        }else {
+            ans = max(ans, chk);
+        }
     }
     cout<<ans;
 }
